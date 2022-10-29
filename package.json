@@ -1,9 +1,13 @@
 {
+  "type": "module",
   "name": "vitest-mock",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "concurrently \"npm run api\" \"npm run vite\"",
+    "vite": "vite",
+    "api": "json-server server.json",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },
@@ -11,11 +15,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vitejs/plugin-vue2": "^2.0.0",
     "@vitest/ui": "^0.24.3",
+    "axios": "^1.1.3",
     "vite": "^3.2.1",
-    "vitest": "^0.24.3"
+    "vitest": "^0.24.3",
+    "vue": "^2.7.1",
+    "vue-template-compiler": "^2.7.13"
   },
   "devDependencies": {
-    "jsdom": "^20.0.1"
+    "jsdom": "^20.0.1",
+    "json-server": "^0.17.0"
   }
 }
