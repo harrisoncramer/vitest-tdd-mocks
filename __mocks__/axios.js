@@ -1,12 +1,12 @@
 import { vi } from 'vitest'
+import hello from "../test/fixtures/hello.json"
+
+const map = {
+  "/api/msg": hello
+}
 
 function getRoute (url) {
-  switch(url) {
-    case "/api/msg":
-      return { data: { message: "Hello World" }}
-    default:
-      return {}
-  }
+  return map[url]
 }
 
 export default {
