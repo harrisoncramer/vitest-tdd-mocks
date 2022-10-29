@@ -2,15 +2,15 @@ import axios from 'axios'
 
 vi.mock('axios')
 
-test('mocked axios', async () => {
-  await axios.get('string')
+describe("Testing axios itself", () => {
+  test('mocked axios', async () => {
+    const res = await axios.get('/api/msg')
+    expect(axios.get).toHaveBeenCalledWith('/api/msg')
+    expect(res).toStrictEqual({ data: { message: "Hello World" }})
+  })
 
-  expect(axios.get).toHaveBeenCalledWith('string')
-  expect(axios.post).toBeUndefined()
+  test('can get actual axios', async () => {
+    const ax = await vi.importActual('axios')
+    expect(vi.isMockFunction(ax.get)).toBe(false)
+  })
 })
-
-test('can get actual axios', async () => {
-  const ax = await vi.importActual<typeof axios>('axios')
-  expect(vi.isMockFunction(ax.get)).toBe(false)
-})
-

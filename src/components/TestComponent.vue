@@ -1,5 +1,5 @@
 <template>
-  <div v-if="msg">{{ msg }}</div>
+  <div class="my-message" v-if="msg">{{ msg }}</div>
   <div v-else>Loading...</div>
 </template>
 
