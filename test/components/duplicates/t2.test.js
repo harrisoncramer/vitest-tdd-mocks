@@ -1,8 +1,9 @@
 import { mount } from "@vue/test-utils";
 import flushPromises from 'flush-promises'
-import TestComponent from "../../src/components/TestComponent.vue"
-import override from "../fixtures/another_file.json"
-import { initialize } from "../utils"
+import TestComponent from "../../../src/components/TestComponent.vue"
+import override from "../../fixtures/another_file.json"
+import { initialize } from "../../utils"
+
 
 /* This test suite merely exists to show that we can
   * have multiple worker pools running at the same time
@@ -13,7 +14,7 @@ beforeAll(() => {
   vi.mock('axios')
 })
 
-describe("TestComponent.vue (DUPLICATE) with Axios", () => {
+describe("TestComponent.vue with Axios", () => {
   test("Should render based on unchanged mock file (see __mocks__/axios.js)", async () => {
     const wrapper = mount(TestComponent);
     await flushPromises()
@@ -22,7 +23,7 @@ describe("TestComponent.vue (DUPLICATE) with Axios", () => {
   });
 
   test("Should render with all GET routes overridden with a new object", async () => {
-    const axios = await import('../../__mocks__/axios')
+    const axios = await import('../../../__mocks__/axios')
     const response = { data: { message: "Message from the Javascript object"} }
     axios.default.get = vi.fn().mockResolvedValue(response)
 
@@ -33,7 +34,7 @@ describe("TestComponent.vue (DUPLICATE) with Axios", () => {
   });
 
   test("Should render with all GET routes overridden with a JSON file", async () => {
-    const axios = await import('../../__mocks__/axios')
+    const axios = await import('../../../__mocks__/axios')
     axios.default.get = vi.fn().mockResolvedValue({ data: override })
 
     const wrapper = mount(TestComponent);
@@ -51,7 +52,7 @@ describe("TestComponent.vue (DUPLICATE) with Axios", () => {
         }
       }
 
-      const axios = await import('../../__mocks__/axios')
+      const axios = await import('../../../__mocks__/axios')
       axios.default.get = vi.fn(handlerOverride)
 
       const wrapper = mount(TestComponent);
@@ -61,7 +62,7 @@ describe("TestComponent.vue (DUPLICATE) with Axios", () => {
     });
 
     test("Should use JSON file override for all GET requests", async () => {
-      const axios = await import('../../__mocks__/axios')
+      const axios = await import('../../../__mocks__/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
           return { data: override }
@@ -76,7 +77,7 @@ describe("TestComponent.vue (DUPLICATE) with Axios", () => {
     })
 
     test("Should use JSON file override per endpoint", async () => {
-      const axios = await import('../../__mocks__/axios')
+      const axios = await import('../../../__mocks__/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
           return { data: override }
