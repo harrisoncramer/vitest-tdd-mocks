@@ -38,16 +38,7 @@ mockAxios.getMockResponse = function (config) {
   return res
 }
 
-/* Sets the mocks to their default values, and the handlers  */
-mockAxios.clearMockRequests = function () {
-  const processId = process.env.VITEST_POOL_ID
-  mockAxios[processId] = {
-    mockRequests
-  }
-  mockAxios.get = vi.fn(getRoute)
-}
-
-/* The actual handler for an axios call */
+/* The actual handlers axios calls */
 function getRoute (url = '', params = {}) {
   return mockAxios.getMockResponse({ url, params, method: 'get'})
 }
@@ -56,7 +47,18 @@ function postRoute (url = '', params = {}) {
   return mockAxios.getMockResponse({ url, params, method: 'post'})
 }
 
+/* Attach the handlers to the axios mock, allow them to be spied */
 mockAxios.get = vi.fn(getRoute)
 mockAxios.post = vi.fn(postRoute)
+
+/* Clears the mocks to their default values */
+mockAxios.clearMockRequests = function () {
+  const processId = process.env.VITEST_POOL_ID
+  mockAxios[processId] = {
+    mockRequests
+  }
+  mockAxios.get = vi.fn(getRoute)
+  mockAxios.post = vi.fn(postRoute)
+}
 
 export default mockAxios

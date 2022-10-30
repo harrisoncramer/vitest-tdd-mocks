@@ -4,6 +4,8 @@ import PostComponent from "@components/PostComponent.vue"
 import override from "@test/fixtures/post_override.json"
 import { initialize } from "@test/utils"
 
+import axios from '@mocks/axios'
+
 beforeAll(() => {
   vi.mock('axios')
 })
@@ -27,6 +29,7 @@ describe("PostComponent.vue with Axios", () => {
     expect(count.text()).toBe("1")
 
     await button.trigger('click')
+    expect(axios.post).toHaveBeenCalledWith('/api/count', { num: 2 })
 
     expect(count.text()).toBe("2")
   });
@@ -44,6 +47,8 @@ describe("PostComponent.vue with Axios", () => {
     expect(count.text()).toBe("6")
 
     await button.trigger('click')
+    expect(axios.post).toHaveBeenCalledWith('/api/count', { num: 7 })
+
 
     expect(count.text()).toBe("7")
 
