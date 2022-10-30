@@ -2,6 +2,7 @@ import { mount } from "@vue/test-utils";
 import flushPromises from 'flush-promises'
 import TestComponent from "../../src/components/TestComponent.vue"
 import override from "../fixtures/another_file.json"
+import otherOverride from "../fixtures/another_file_2.json"
 import { initialize } from "../utils"
 
 vi.mock('axios')
@@ -36,58 +37,71 @@ describe("TestComponent.vue with Axios", () => {
     expect(msg.text()).toBe("Message from the JSON override")
   });
 
-  it("Should render with routing logic per request", async () => {
-    const response = { data: { message: "Message from the Javascript object"} }
-    const handlerOverride = (route) => {
-      if(route === "/api/msg") {
-        return response
+  describe("With routing logic", () => {
+    it("Should render with routing logic per request", async () => {
+      const response = { data: { message: "Message from the Javascript object"} }
+      const handlerOverride = (route) => {
+        if(route === "/api/msg") {
+          return response
+        }
       }
-    }
 
-    const axios = await import('../../__mocks__/axios')
-    axios.default.get = vi.fn(handlerOverride)
+      const axios = await import('../../__mocks__/axios')
+      axios.default.get = vi.fn(handlerOverride)
 
-    const wrapper = mount(TestComponent);
-    await flushPromises()
-    const msg = wrapper.find(".my-message")
-    expect(msg.text()).toBe("Message from the Javascript object")
-  });
+      const wrapper = mount(TestComponent);
+      await flushPromises()
+      const msg = wrapper.find(".my-message")
+      expect(msg.text()).toBe("Message from the Javascript object")
+    });
 
-  it("Should render with routing logic per request and JSON file overrides", async () => {
-    const axios = await import('../../__mocks__/axios')
-    const handlerOverride = (route) => {
-      if(route === "/api/msg") {
-        return override
-      } 
-    }
-    axios.default.get = vi.fn(handlerOverride)
+    it("Should use JSON file override for all GET requests", async () => {
+      const axios = await import('../../__mocks__/axios')
+      const handlerOverride = (route) => {
+        if(route === "/api/msg") {
+          return override
+        } 
+      }
+      axios.default.get = vi.fn(handlerOverride)
 
-    const wrapper = mount(TestComponent);
-    await flushPromises()
-    const msg = wrapper.find(".my-message")
-    expect(msg.text()).toBe("Message from the JSON override")
-  })
+      const wrapper = mount(TestComponent);
+      await flushPromises()
+      const msg = wrapper.find(".my-message")
+      expect(msg.text()).toBe("Message from the JSON override")
+    })
 
-  it("Should render with routing logic per request and JSON file overrides", async () => {
-    const axios = await import('../../__mocks__/axios')
-    const handlerOverride = (route) => {
-      if(route === "/api/msg") {
-        return override
-      } 
-    }
-    axios.default.get = vi.fn(handlerOverride)
+    it("Should use JSON file override per endpoint", async () => {
+      const axios = await import('../../__mocks__/axios')
+      const handlerOverride = (route) => {
+        if(route === "/api/msg") {
+          return override
+        } 
+      }
+      axios.default.get = vi.fn(handlerOverride)
 
-    const wrapper = mount(TestComponent);
-    await flushPromises()
-    const msg = wrapper.find(".my-message")
-    expect(msg.text()).toBe("Message from the JSON override")
-  })
+      const wrapper = mount(TestComponent);
+      await flushPromises()
+      const msg = wrapper.find(".my-message")
+      expect(msg.text()).toBe("Message from the JSON override")
+    })
 
-  it("Should render with routing logic and JSON file, but abstracted away (initialize function)", async () => {
-    initialize()
-    const wrapper = mount(TestComponent);
-    await flushPromises()
-    const msg = wrapper.find(".my-message")
-    expect(msg.text()).toBe("Message from the JSON override")
+    it("JSON file per endpoint, but abstracted away", async () => {
+      await initialize()
+      const wrapper = mount(TestComponent);
+      await flushPromises()
+      const msg = wrapper.find(".my-message")
+      expect(msg.text()).toBe("Message from the JSON override")
+    })
+
+    it("Overrides per endpoint, but abstracted away", async () => {
+      await initialize({
+        '/api/msg': otherOverride
+      })
+
+      const wrapper = mount(TestComponent);
+      await flushPromises()
+      const msg = wrapper.find(".my-message")
+      expect(msg.text()).toBe("Message from the second JSON override")
+    })
   })
 });
