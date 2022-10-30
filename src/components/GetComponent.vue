@@ -6,7 +6,7 @@
 <script>
 import axios from "axios"
 export default {
-  name: "TestComponent",
+  name: "GetComponent",
   async created () {
     const { data } = await axios.get("/api/msg")
     this.msg = data.message
