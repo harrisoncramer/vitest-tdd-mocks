@@ -6,7 +6,7 @@ describe("Testing axios itself", () => {
   it('Should mock axios', async () => {
     const { data } = await axios.get('/api/msg')
     expect(axios.get).toHaveBeenCalledWith('/api/msg')
-    expect(data).toStrictEqual({ message: "I am the normal expected message" })
+    expect(data).toStrictEqual({ message: "Message from the server" })
   })
 
   it('Should get actual axios', async () => {
