@@ -95,7 +95,7 @@ describe("TestComponent.vue with Axios", () => {
 
     it("Overrides per endpoint, but abstracted away", async () => {
       await initialize({
-        '/api/msg': otherOverride
+        'GET /api/msg': otherOverride
       })
 
       const wrapper = mount(TestComponent);

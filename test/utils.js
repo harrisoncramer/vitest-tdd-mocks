@@ -1,18 +1,20 @@
 import override from "./fixtures/another_file.json"
 
-const mockMap = {
-  '/api/msg': override
-}
 
 export const initialize = async (addOnMocks = {}) => {
 
-  const axios = await import('../__mocks__/axios')
-
-  for (const [route, response] of Object.entries(addOnMocks)) {
-    mockMap[route] = response
+  const getMockMap = {}
+  getMockMap[process.env.VITEST_POOL_ID] = {
+    '/api/msg': override
   }
 
-  const getHandler = (route) => mockMap[route]
+  const mockAxios = await import('../__mocks__/axios')
 
-  axios.default.get = vi.fn(getHandler)
+  for (const [route, response] of Object.entries(addOnMocks)) {
+    getMockMap[route] = response
+  }
+
+  const getHandler = (route) => getMockMap[process.env.VITEST_POOL_ID][route]
+
+  mockAxios.default.get = vi.fn(getHandler)
 }
