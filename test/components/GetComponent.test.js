@@ -1,14 +1,8 @@
 import { mount } from "@vue/test-utils";
 import flushPromises from 'flush-promises'
-import GetComponent from "../../src/components/GetComponent.vue"
-import override from "../fixtures/another_file.json"
-import { initialize } from "../utils"
-
-
-/* This test suite merely exists to show that we can
-  * have multiple worker pools running at the same time
-  * and their mocked modules will not collide due to our use
-  * of the VITEST_POOL_ID variable */
+import GetComponent from "@components/GetComponent.vue"
+import override from "@test/fixtures/another_file.json"
+import { initialize } from "@test/utils"
 
 beforeAll(() => {
   vi.mock('axios')
@@ -23,7 +17,7 @@ describe("GetComponent.vue with Axios", () => {
   });
 
   test("Should render with all GET routes overridden with a new object", async () => {
-    const axios = await import('../../__mocks__/axios')
+    const axios = await import('@mocks/axios')
     const response = { data: { message: "Message from the Javascript object"} }
     axios.default.get = vi.fn().mockResolvedValue(response)
 
@@ -34,7 +28,7 @@ describe("GetComponent.vue with Axios", () => {
   });
 
   test("Should render with all GET routes overridden with a JSON file", async () => {
-    const axios = await import('../../__mocks__/axios')
+    const axios = await import('@mocks/axios')
     axios.default.get = vi.fn().mockResolvedValue({ data: override })
 
     const wrapper = mount(GetComponent);
@@ -52,7 +46,7 @@ describe("GetComponent.vue with Axios", () => {
         }
       }
 
-      const axios = await import('../../__mocks__/axios')
+      const axios = await import('@mocks/axios')
       axios.default.get = vi.fn(handlerOverride)
 
       const wrapper = mount(GetComponent);
@@ -62,7 +56,7 @@ describe("GetComponent.vue with Axios", () => {
     });
 
     test("Should use JSON file override for all GET requests", async () => {
-      const axios = await import('../../__mocks__/axios')
+      const axios = await import('@mocks/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
           return { data: override }
@@ -77,7 +71,7 @@ describe("GetComponent.vue with Axios", () => {
     })
 
     test("Should use JSON file override per endpoint", async () => {
-      const axios = await import('../../__mocks__/axios')
+      const axios = await import('@mocks/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
           return { data: override }
