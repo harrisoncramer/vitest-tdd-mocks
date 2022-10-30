@@ -9,14 +9,14 @@ vi.mock('axios')
 
 describe("TestComponent.vue with Axios", () => {
 
-  it("Should render based on unchanged mock file (see __mocks__/axios.js)", async () => {
+  test("Should render based on unchanged mock file (see __mocks__/axios.js)", async () => {
     const wrapper = mount(TestComponent);
     await flushPromises()
     const msg = wrapper.find(".my-message")
     expect(msg.text()).toBe("Message from the server")
   });
 
-  it("Should render with all GET routes overriden with new a new object", async () => {
+  test("Should render with all GET routes overriden with new a new object", async () => {
     const axios = await import('../../__mocks__/axios')
     const response = { data: { message: "Message from the Javascript object"} }
     axios.default.get = vi.fn().mockResolvedValue(response)
@@ -27,7 +27,7 @@ describe("TestComponent.vue with Axios", () => {
     expect(msg.text()).toBe("Message from the Javascript object")
   });
 
-  it("Should render with all GET routes overridden with a JSON file", async () => {
+  test("Should render with all GET routes overridden with a JSON file", async () => {
     const axios = await import('../../__mocks__/axios')
     axios.default.get = vi.fn().mockResolvedValue(override)
 
@@ -38,7 +38,7 @@ describe("TestComponent.vue with Axios", () => {
   });
 
   describe("With routing logic", () => {
-    it("Should render with routing logic per request", async () => {
+    test("Should render with routing logic per request", async () => {
       const response = { data: { message: "Message from the Javascript object"} }
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
@@ -55,7 +55,7 @@ describe("TestComponent.vue with Axios", () => {
       expect(msg.text()).toBe("Message from the Javascript object")
     });
 
-    it("Should use JSON file override for all GET requests", async () => {
+    test("Should use JSON file override for all GET requests", async () => {
       const axios = await import('../../__mocks__/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
@@ -70,7 +70,7 @@ describe("TestComponent.vue with Axios", () => {
       expect(msg.text()).toBe("Message from the JSON override")
     })
 
-    it("Should use JSON file override per endpoint", async () => {
+    test("Should use JSON file override per endpoint", async () => {
       const axios = await import('../../__mocks__/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
@@ -85,23 +85,20 @@ describe("TestComponent.vue with Axios", () => {
       expect(msg.text()).toBe("Message from the JSON override")
     })
 
-    it("JSON file per endpoint, but abstracted away", async () => {
+    test("Abstraction of mock", async () => {
       await initialize()
       const wrapper = mount(TestComponent);
       await flushPromises()
       const msg = wrapper.find(".my-message")
-      expect(msg.text()).toBe("Message from the JSON override")
+      expect(msg.text()).toBe("Message from the server")
     })
 
-    it("Overrides per endpoint, but abstracted away", async () => {
-      await initialize({
-        'GET /api/msg': otherOverride
-      })
-
-      const wrapper = mount(TestComponent);
-      await flushPromises()
-      const msg = wrapper.find(".my-message")
-      expect(msg.text()).toBe("Message from the second JSON override")
-    })
+    // test("Abstraction of mock, with override", async () => {
+    //   await initialize({ 'GET /api/msg': override })
+    //   const wrapper = mount(TestComponent);
+    //   await flushPromises()
+    //   const msg = wrapper.find(".my-message")
+    //   expect(msg.text()).toBe("Message from the JSON override")
+    // })
   })
 });
