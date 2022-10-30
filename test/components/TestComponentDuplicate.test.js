@@ -4,7 +4,6 @@ import TestComponent from "../../src/components/TestComponent.vue"
 import override from "../fixtures/another_file.json"
 import { initialize } from "../utils"
 
-
 /* This test suite merely exists to show that we can
   * have multiple worker pools running at the same time
   * and their mocked modules will not collide due to our use
@@ -14,7 +13,7 @@ beforeAll(() => {
   vi.mock('axios')
 })
 
-describe("TestComponent.vue with Axios", () => {
+describe("TestComponent.vue (DUPLICATE) with Axios", () => {
   test("Should render based on unchanged mock file (see __mocks__/axios.js)", async () => {
     const wrapper = mount(TestComponent);
     await flushPromises()

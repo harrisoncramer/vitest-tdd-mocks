@@ -1,15 +1,16 @@
 import { vi } from 'vitest'
 import normal from "../test/fixtures/normal.json"
 
-/* The default responses to every endpoint */
+/* The default responses to every endpoint. */
 const mockAxios = {}
-const mockRequests = { "GET /api/msg": normal }
+const processId = process.env.VITEST_POOL_ID
+const mockRequests = { [processId]: { "GET /api/msg": normal } }
 mockAxios.mockRequests = mockRequests
 
 /* Attaches or overrides default mocks on the module */
 mockAxios.setMockRequests = function (requests) {
   for (const [route, response] of Object.entries(requests)) {
-    this.mockRequests[route] = response
+    this.mockRequests[process.env.VITEST_POOL_ID][route] = response
   }
 }
 
@@ -17,7 +18,8 @@ mockAxios.setMockRequests = function (requests) {
 mockAxios.getMockResponse = function (config) {
   const { url, method } = config
 
-  const response = this.mockRequests[method.toUpperCase() + " " + url]
+  const processId = process.env.VITEST_POOL_ID
+  const response = this.mockRequests[processId][method.toUpperCase() + " " + url]
 
   const res = {
     status: 200,
@@ -30,7 +32,10 @@ mockAxios.getMockResponse = function (config) {
 
 /* Sets the mocks to their default values, and the handlers  */
 mockAxios.clearMockRequests = function () {
-  mockAxios.mockRequests = mockRequests
+  const processId = process.env.VITEST_POOL_ID
+  mockAxios[processId] = {
+    mockRequests
+  }
   mockAxios.get = vi.fn(getRoute)
 }
 
