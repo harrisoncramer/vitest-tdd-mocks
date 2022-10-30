@@ -3,9 +3,8 @@ import normal from "../test/fixtures/normal.json"
 
 /* The default responses to every endpoint */
 const mockAxios = {}
-mockAxios.mockRequests = {
-  "GET /api/msg": normal
-}
+const mockRequests = { "GET /api/msg": normal }
+mockAxios.mockRequests = mockRequests
 
 /* Attaches or overrides default mocks on the module */
 mockAxios.setMockRequests = function (requests) {
@@ -27,6 +26,12 @@ mockAxios.getMockResponse = function (config) {
   }
 
   return res
+}
+
+/* Sets the mocks to their default values, and the handlers  */
+mockAxios.clearMockRequests = function () {
+  mockAxios.mockRequests = mockRequests
+  mockAxios.get = vi.fn(getRoute)
 }
 
 /* The actual handler for an axios call */
