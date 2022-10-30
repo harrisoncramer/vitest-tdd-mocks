@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     proxy: {
-      "/api/msg": {
-        target: "http://localhost:3000/msg", /* We're using json-server in development */
+      "/api": {
+        target: "http://localhost:3000/api", /* We're using json-server in development */
       },
     },
   },

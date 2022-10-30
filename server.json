@@ -1,5 +1,9 @@
 {
   "msg": {
-      "message": "Message from the server"
-    }
+    "message": "Message from the server"
+  },
+  "count": {
+    "num": 1,
+    "apiId": "api"
+  }
 }

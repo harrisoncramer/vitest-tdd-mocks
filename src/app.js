@@ -1,9 +1,11 @@
 import Vue from "vue"
-import TestComponent from "./components/TestComponent.vue"
+import GetComponent from "./components/GetComponent.vue"
+import PostComponent from "./components/PostComponent.vue"
 
 window.app = new Vue({
   el: "#app",
   components: {
-    testcomponent: TestComponent,
+    getcomponent: GetComponent,
+    postcomponent: PostComponent,
   }
 })
