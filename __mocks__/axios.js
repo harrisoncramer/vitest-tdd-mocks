@@ -1,15 +1,24 @@
 import { vi } from 'vitest'
 import normal from "../test/fixtures/normal.json"
 
+/* The default responses to every endpoint */
 const mockAxios = {}
 mockAxios.mockRequests = {
-  "/api/msg": normal
+  "GET /api/msg": normal
 }
 
-mockAxios.getMockResponse = function (config) {
-  const { url } = config
+/* Attaches or overrides default mocks on the module */
+mockAxios.setMockRequests = function (requests) {
+  for (const [route, response] of Object.entries(requests)) {
+    this.mockRequests[route] = response.data
+  }
+}
 
-  const response = this.mockRequests[url]
+/* Wrapper around a call that provides additional axios context */
+mockAxios.getMockResponse = function (config) {
+  const { url, method } = config
+
+  const response = this.mockRequests[method.toUpperCase() + " " + url]
 
   const res = {
     status: 200,
@@ -20,16 +29,7 @@ mockAxios.getMockResponse = function (config) {
   return res
 }
 
-mockAxios.setMockRequests = function (requests) {
-  for (const [route, response] of Object.entries(requests)) {
-    const [method, url] = route.split(" ")
-    if(method) this.mockRequests[url] = response.data
-    else {
-      // Handle other endpoints in future tests
-    }
-  }
-}
-
+/* The actual handler for an axios call */
 function getRoute (url = '', params = {}) {
   return mockAxios.getMockResponse({ url, params, method: 'get'})
 }

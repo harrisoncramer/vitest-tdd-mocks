@@ -4,6 +4,6 @@ export const initialize = async (addOnMocks = {}) => {
 
   mockAxios.default.setMockRequests(addOnMocks)
 
-  const getHandler = (route) => mockAxios.default.getMockResponse({ url: route })
+  const getHandler = (route) => mockAxios.default.getMockResponse({ url: route, method: 'get' })
   mockAxios.default.get = vi.fn(getHandler)
 }
