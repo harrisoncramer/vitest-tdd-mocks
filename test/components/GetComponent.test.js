@@ -1,7 +1,7 @@
 import { mount } from "@vue/test-utils";
 import flushPromises from 'flush-promises'
 import GetComponent from "@components/GetComponent.vue"
-import override from "@test/fixtures/another_file.json"
+import override from "@test/fixtures/get_override.json"
 import { initialize } from "@test/utils"
 
 beforeAll(() => {

@@ -9,7 +9,8 @@ const processId = process.env.VITEST_POOL_ID
 const mockRequests = { 
   [processId]: { 
     "GET /api/msg": message,
-    "GET /api/count": count 
+    "GET /api/count": count,
+    "POST /api/count": { ...count, num: 2 },
   } 
 }
 mockAxios.mockRequests = mockRequests
@@ -51,6 +52,11 @@ function getRoute (url = '', params = {}) {
   return mockAxios.getMockResponse({ url, params, method: 'get'})
 }
 
+function postRoute (url = '', params = {}) {
+  return mockAxios.getMockResponse({ url, params, method: 'post'})
+}
+
 mockAxios.get = vi.fn(getRoute)
+mockAxios.post = vi.fn(postRoute)
 
 export default mockAxios
