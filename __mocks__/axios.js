@@ -1,12 +1,26 @@
 import { vi } from 'vitest'
-import hello from "../test/fixtures/hello.json"
+import normal from "../test/fixtures/normal.json"
 
 const map = {
-  "/api/msg": hello
+  "/api/msg": normal
 }
 
-function getRoute (url) {
-  return map[url]
+const getMockResponse = (config) => {
+  const { url} = config
+
+  const response = map[url]
+
+  const res = {
+    status: 200,
+    statusText: 'OK',
+    data: response
+  }
+
+  return res
+}
+
+function getRoute (url = '', params = {}) {
+  return getMockResponse({ url, params, method: 'get'})
 }
 
 export default {

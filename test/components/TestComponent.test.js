@@ -11,7 +11,7 @@ describe("TestComponent.vue with Axios", () => {
     const wrapper = mount(TestComponent);
     await flushPromises()
     const msg = wrapper.find(".my-message")
-    expect(msg.text()).toBe("Hello World")
+    expect(msg.text()).toBe("I am the normal expected message")
   });
 
   it("Should render the correct content with object override", async () => {

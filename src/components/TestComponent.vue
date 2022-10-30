@@ -8,8 +8,8 @@ import axios from "axios"
 export default {
   name: "TestComponent",
   async created () {
-    const response = await axios.get("/api/msg")
-    this.msg = response.data.message
+    const { data } = await axios.get("/api/msg")
+    this.msg = data.message
   },
   data () {
     return {

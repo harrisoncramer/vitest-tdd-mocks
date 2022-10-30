@@ -4,9 +4,9 @@ vi.mock('axios')
 
 describe("Testing axios itself", () => {
   it('Should mock axios', async () => {
-    const res = await axios.get('/api/msg')
+    const { data } = await axios.get('/api/msg')
     expect(axios.get).toHaveBeenCalledWith('/api/msg')
-    expect(res).toStrictEqual({ data: { message: "Hello World" }})
+    expect(data).toStrictEqual({ message: "I am the normal expected message" })
   })
 
   it('Should get actual axios', async () => {
