@@ -2,7 +2,6 @@ import { mount } from "@vue/test-utils";
 import flushPromises from 'flush-promises'
 import TestComponent from "../../src/components/TestComponent.vue"
 import override from "../fixtures/another_file.json"
-import otherOverride from "../fixtures/another_file_2.json"
 import { initialize } from "../utils"
 
 vi.mock('axios')
@@ -16,7 +15,7 @@ describe("TestComponent.vue with Axios", () => {
     expect(msg.text()).toBe("Message from the server")
   });
 
-  test("Should render with all GET routes overriden with new a new object", async () => {
+  test("Should render with all GET routes overridden with a new object", async () => {
     const axios = await import('../../__mocks__/axios')
     const response = { data: { message: "Message from the Javascript object"} }
     axios.default.get = vi.fn().mockResolvedValue(response)
@@ -29,7 +28,7 @@ describe("TestComponent.vue with Axios", () => {
 
   test("Should render with all GET routes overridden with a JSON file", async () => {
     const axios = await import('../../__mocks__/axios')
-    axios.default.get = vi.fn().mockResolvedValue(override)
+    axios.default.get = vi.fn().mockResolvedValue({ data: override })
 
     const wrapper = mount(TestComponent);
     await flushPromises()
@@ -59,7 +58,7 @@ describe("TestComponent.vue with Axios", () => {
       const axios = await import('../../__mocks__/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
-          return override
+          return { data: override }
         } 
       }
       axios.default.get = vi.fn(handlerOverride)
@@ -74,7 +73,7 @@ describe("TestComponent.vue with Axios", () => {
       const axios = await import('../../__mocks__/axios')
       const handlerOverride = (route) => {
         if(route === "/api/msg") {
-          return override
+          return { data: override }
         } 
       }
       axios.default.get = vi.fn(handlerOverride)

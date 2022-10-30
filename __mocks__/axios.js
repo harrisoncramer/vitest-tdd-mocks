@@ -10,7 +10,7 @@ mockAxios.mockRequests = {
 /* Attaches or overrides default mocks on the module */
 mockAxios.setMockRequests = function (requests) {
   for (const [route, response] of Object.entries(requests)) {
-    this.mockRequests[route] = response.data
+    this.mockRequests[route] = response
   }
 }
 
