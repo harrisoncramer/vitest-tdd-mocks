@@ -1,7 +1,7 @@
 <template>
   <div>
     <button class="my-button" @click="handleClick">Click Me</button>
-    <div v-if="num">{{ num }}</div>
+    <div v-if="num" class="my-count">{{ num }}</div>
   </div>
 </template>
 

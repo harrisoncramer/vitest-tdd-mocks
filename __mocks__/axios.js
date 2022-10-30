@@ -1,10 +1,17 @@
 import { vi } from 'vitest'
-import normal from "../test/fixtures/normal.json"
+import message from "@test/fixtures/default_message.json"
+import count from "@test/fixtures/default_count.json"
 
 /* The default responses to every endpoint. */
 const mockAxios = {}
 const processId = process.env.VITEST_POOL_ID
-const mockRequests = { [processId]: { "GET /api/msg": normal } }
+
+const mockRequests = { 
+  [processId]: { 
+    "GET /api/msg": message,
+    "GET /api/count": count 
+  } 
+}
 mockAxios.mockRequests = mockRequests
 
 /* Attaches or overrides default mocks on the module */
