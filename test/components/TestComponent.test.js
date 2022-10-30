@@ -93,12 +93,12 @@ describe("TestComponent.vue with Axios", () => {
       expect(msg.text()).toBe("Message from the server")
     })
 
-    // test("Abstraction of mock, with override", async () => {
-    //   await initialize({ 'GET /api/msg': override })
-    //   const wrapper = mount(TestComponent);
-    //   await flushPromises()
-    //   const msg = wrapper.find(".my-message")
-    //   expect(msg.text()).toBe("Message from the JSON override")
-    // })
+    test("Abstraction of mock, with override", async () => {
+      await initialize({ 'GET /api/msg': override })
+      const wrapper = mount(TestComponent);
+      await flushPromises()
+      const msg = wrapper.find(".my-message")
+      expect(msg.text()).toBe("Message from the JSON override")
+   })
   })
 });

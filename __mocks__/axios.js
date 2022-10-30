@@ -20,9 +20,20 @@ mockAxios.getMockResponse = function (config) {
   return res
 }
 
+mockAxios.setMockRequests = function (requests) {
+  for (const [route, response] of Object.entries(requests)) {
+    const [method, url] = route.split(" ")
+    if(method) this.mockRequests[url] = response.data
+    else {
+      // Handle other endpoints in future tests
+    }
+  }
+}
+
 function getRoute (url = '', params = {}) {
   return mockAxios.getMockResponse({ url, params, method: 'get'})
 }
 
 mockAxios.get = vi.fn(getRoute)
+
 export default mockAxios
