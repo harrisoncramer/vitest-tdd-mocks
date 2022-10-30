@@ -1,14 +1,15 @@
 import { vi } from 'vitest'
 import normal from "../test/fixtures/normal.json"
 
-const map = {
+const mockAxios = {}
+mockAxios.mockRequests = {
   "/api/msg": normal
 }
 
-const getMockResponse = (config) => {
-  const { url} = config
+mockAxios.getMockResponse = function (config) {
+  const { url } = config
 
-  const response = map[url]
+  const response = this.mockRequests[url]
 
   const res = {
     status: 200,
@@ -20,9 +21,8 @@ const getMockResponse = (config) => {
 }
 
 function getRoute (url = '', params = {}) {
-  return getMockResponse({ url, params, method: 'get'})
+  return mockAxios.getMockResponse({ url, params, method: 'get'})
 }
 
-export default {
-  get: vi.fn(getRoute),
-}
+mockAxios.get = vi.fn(getRoute)
+export default mockAxios
